@@ -107,7 +107,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     const bCount = bookBoroughCounts.get(bookB.name);
     return aCount > bCount ? 1 : -1;
   });
-  // debugger;
 
   var dataPoints = [];
 
@@ -180,12 +179,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
               color: '#9ecae1',
               name: '9-10',
             },
-            // {
-            //   from: 0,
-            //   to: 10,
-            //   color: '#008FFB',
-            //   name: 'normal range',
-            // },
             {
               from: RANK_NOT_IN_TOP_TEN - .5,
               to: RANK_NOT_IN_TOP_TEN + .5,
@@ -197,26 +190,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       }
     },
     series: forApex,
-    // xaxis: {
-    //   type: 'numeric',
-    // }
-    // series: [
-    //   {
-    //     name: 'Becoming', data: [
-    //       {x: 'Brooklyn', y: 2},
-    //       {x: 'Bronx', y: 3}
-    //   ]},
-    //   {
-    //     name: 'Some James PAterson', data: [
-    //       {x: 'Brooklyn', y: 3},
-    //       {x: 'Bronx', y: 3}
-    //   ]},
-    //   {
-    //     name: 'Who _are_ the crawdads', data: [
-    //       {x: 'Brooklyn', y: 1},
-    //       {x: 'Bronx', y: 9}
-    //   ]}
-    // ],
   };
 
     var chart = new ApexCharts(document.querySelector("#chart"), options);
