@@ -1,0 +1,191 @@
+
+<!doctype html>
+<meta charset="utf-8">
+<title>NYC's Most Checked Out Books, 2019</title>
+
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<!-- https://cdnjs.com/libraries/lodash.js/ -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<!-- for fetching - http://learnjsdata.com/read_data.html -->
+<script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+<script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+
+<!-- specifically for https://github.com/d3/d3-array/blob/master/README.md#group -->
+<script src="https://d3js.org/d3-array.v2.min.js"></script>
+
+<style>
+</style>
+
+<div id="chart"></div>
+
+<div id="notes">
+  Data from <a href="https://gothamist.com/arts-entertainment/here-are-most-popular-nyc-library-books-2019-borough" target="_blank">The Gothamist</a>.
+</div>
+
+<script>
+
+
+function bookBoroughKey(borough, bookTitle) {
+  return `${borough}_${bookTitle}`;
+};
+
+function booksOrderedByNumBoroughs(allBooksData) {
+  const bookBoroughCounts = d3.rollup(allBooksData, v => v.length, d => d.book_title);
+}
+
+const RANK_NOT_IN_TOP_TEN = 0;
+
+// By population per 2018 estimates:
+// https://www1.nyc.gov/site/planning/planning-level/nyc-population/current-future-populations.page
+// definitely gonna piss off some Manhattan-ites
+const boroughsInOrder = [
+  'brooklyn',
+  'queens',
+  'manhattan',
+  'bronx',
+  'staten_island'
+];
+
+// d3.csv('https://gist.githubusercontent.com/nrjones8/ac0f9f56e708f28dc2278d31d779142d/raw/613ccaa155429055fbc7e2592c07c6be272147cb/nyc_most_checked_out_books_2019.csv').then(function(data) {
+d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
+  // i.e. select book_title, count(*) from data gropu by book_title
+  const bookBoroughCounts = d3.rollup(data, v => v.length, d => d.book_title);
+
+  const allBooks = new Set(bookBoroughCounts.keys());
+  // const allBoroughs = new Set(data.map(d => d.borough_name));
+
+  let bookBoroToRank = new Map();
+  data.forEach(d => bookBoroToRank.set(bookBoroughKey(d.borough_name, d.book_title), d));
+
+  var forApex = [];
+
+  for (let book of allBooks) {
+    let oneBookRankings = [];
+
+    for (let borough of boroughsInOrder) {
+      let mapKey = bookBoroughKey(borough, book);
+      let fullDataObj = bookBoroToRank.get(mapKey);
+      let rank = RANK_NOT_IN_TOP_TEN;
+
+      if (fullDataObj) {
+        rank = fullDataObj.rank;
+      }
+
+      oneBookRankings.push({
+          x: borough,
+          y: rank
+        });
+    }
+
+    forApex.push({
+      name: book,
+      data: oneBookRankings,
+    });
+  }
+  forApex = forApex.sort(function(bookA, bookB) {
+    const aCount = bookBoroughCounts.get(bookA.name);
+    const bCount = bookBoroughCounts.get(bookB.name);
+    return aCount > bCount ? 1 : -1;
+  });
+  // debugger;
+
+  var dataPoints = [];
+
+  
+  // TODO - x axis label on top
+  // TODO - better color scheme
+  // TODO - by author...?
+  // TODO - at least include author
+  // These docs are shockingly hard to find, but very helpful:
+  // https://apexcharts.com/docs/options/plotoptions/heatmap/
+  const options = {
+    chart: {
+      type: 'heatmap',
+      height: 700,
+      width: 600,
+    },
+    title: {
+      text: 'Top 10 Most Checked Out Books from NYC Libraries, by Borough - 2019'
+    },
+    plotOptions: {
+      heatmap: {
+        enableShades: false,
+        // http://colorbrewer2.org/?type=sequential&scheme=Blues&n=7
+        colorScale: {
+          ranges: [
+            {
+              from: 1,
+              to: 2,
+              color: '#084594',
+              name: '1-2',
+            },
+            {
+              from: 3,
+              to: 4,
+              color: '#2171b5',
+              name: '3-4',
+            },
+            {
+              from: 5,
+              to: 6,
+              color: '#4292c6',
+              name: '5-6',
+            },
+            {
+              from: 7,
+              to: 8,
+              color: '#6baed6',
+              name: '7-8',
+            },
+            {
+              from: 9,
+              to: 10,
+              color: '#9ecae1',
+              name: '9-10',
+            },
+            // {
+            //   from: 0,
+            //   to: 10,
+            //   color: '#008FFB',
+            //   name: 'normal range',
+            // },
+            {
+              from: RANK_NOT_IN_TOP_TEN - .5,
+              to: RANK_NOT_IN_TOP_TEN + .5,
+              color: '#eff3ff',
+              name: 'Not in top 10',
+            },
+          ]
+        }
+      }
+    },
+    series: forApex,
+    // xaxis: {
+    //   type: 'numeric',
+    // }
+    // series: [
+    //   {
+    //     name: 'Becoming', data: [
+    //       {x: 'Brooklyn', y: 2},
+    //       {x: 'Bronx', y: 3}
+    //   ]},
+    //   {
+    //     name: 'Some James PAterson', data: [
+    //       {x: 'Brooklyn', y: 3},
+    //       {x: 'Bronx', y: 3}
+    //   ]},
+    //   {
+    //     name: 'Who _are_ the crawdads', data: [
+    //       {x: 'Brooklyn', y: 1},
+    //       {x: 'Bronx', y: 9}
+    //   ]}
+    // ],
+  };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+
+    chart.render();
+});
+</script>
