@@ -48,13 +48,27 @@ const boroughsInOrder = [
   'staten_island'
 ];
 
-// d3.csv('https://gist.githubusercontent.com/nrjones8/ac0f9f56e708f28dc2278d31d779142d/raw/613ccaa155429055fbc7e2592c07c6be272147cb/nyc_most_checked_out_books_2019.csv').then(function(data) {
+const DIMENSIONS = {
+  chartHeight: 700,
+  chartWidth: 600,
+  yAxisFontSize: '10px',
+
+  yAxisMaxNumChars: 20,
+
+}
+
 d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
   // i.e. select book_title, count(*) from data gropu by book_title
   const bookBoroughCounts = d3.rollup(data, v => v.length, d => d.book_title);
 
   const allBooks = new Set(bookBoroughCounts.keys());
-  // const allBoroughs = new Set(data.map(d => d.borough_name));
+  // ugh this is janky
+  let bookToAuthor = new Map();
+  for (d of data) {
+    if (! bookToAuthor.has(d.book_title)) {
+      bookToAuthor.set(d.book_title, d.book_author);
+    }
+  }
 
   let bookBoroToRank = new Map();
   data.forEach(d => bookBoroToRank.set(bookBoroughKey(d.borough_name, d.book_title), d));
@@ -79,8 +93,12 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
         });
     }
 
+    const author = bookToAuthor.get(book);
+    const bookClipped = book.length > DIMENSIONS.yAxisMaxNumChars? book.substring(0, DIMENSIONS.yAxisMaxNumChars) + '...' : book;
     forApex.push({
-      name: book,
+      // thanks to https://apexcharts.com/docs/multiline-text-and-line-breaks-in-axes-labels/
+      name: [bookClipped, `by ${author}`],
+      // name: bookWithAuthor,
       data: oneBookRankings,
     });
   }
@@ -103,14 +121,31 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
   const options = {
     chart: {
       type: 'heatmap',
-      height: 700,
-      width: 600,
+      height: DIMENSIONS.chartHeight,
+      width: DIMENSIONS.chartWidth,
     },
     title: {
       text: 'Top 10 Most Checked Out Books from NYC Libraries, by Borough - 2019'
     },
+    // xaxis: {
+    //   position: 'top',
+    // },
+    // legend: {
+    //   position: 'right',
+    // },
+    yaxis: {
+      labels: {
+        // maxWidth: 500,
+        style: {
+          fontSize: DIMENSIONS.yAxisFontSize,
+        },
+        // formatter: (value) => { return `${value.bookTitle}, by ${value.authorName}`; }
+      }
+    },
     plotOptions: {
       heatmap: {
+        // otherwise there's some extra shady shading going on that doens't play nicely with the
+        // colorScale set manually below
         enableShades: false,
         // http://colorbrewer2.org/?type=sequential&scheme=Blues&n=7
         colorScale: {
