@@ -50,7 +50,7 @@ const boroughsInOrder = [
 
 const DIMENSIONS = {
   chartHeight: 700,
-  chartWidth: 600,
+  chartWidth: 800,
   yAxisFontSize: '10px',
 
   yAxisMaxNumChars: 20,
@@ -95,10 +95,12 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
 
     const author = bookToAuthor.get(book);
     const bookClipped = book.length > DIMENSIONS.yAxisMaxNumChars? book.substring(0, DIMENSIONS.yAxisMaxNumChars) + '...' : book;
+    const bookWithAuthor = `${book}, by ${author}`;
     forApex.push({
       // thanks to https://apexcharts.com/docs/multiline-text-and-line-breaks-in-axes-labels/
-      name: [bookClipped, `by ${author}`],
-      // name: bookWithAuthor,
+      // name: [bookClipped, `by ${author}`],
+      // name: book,
+      name: bookWithAuthor,
       data: oneBookRankings,
     });
   }
@@ -134,7 +136,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     // },
     yaxis: {
       labels: {
-        // maxWidth: 500,
+        maxWidth: 500,
         style: {
           fontSize: DIMENSIONS.yAxisFontSize,
         },
