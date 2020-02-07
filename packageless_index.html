@@ -51,7 +51,7 @@ const boroughsInOrder = [
 const DIMENSIONS = {
   chartHeight: 700,
   chartWidth: 800,
-  yAxisFontSize: '10px',
+  yAxisFontSize: '11px',
 
   yAxisMaxNumChars: 20,
 
@@ -61,7 +61,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
   // i.e. select book_title, count(*) from data gropu by book_title
   const bookBoroughCounts = d3.rollup(data, v => v.length, d => d.book_title);
 
-  const allBooks = new Set(bookBoroughCounts.keys());
+  const allBooks = Array.from(bookBoroughCounts).sort(function(x, y) { return y[1] - x[1]; }).map(x => x[0]);
   // ugh this is janky
   let bookToAuthor = new Map();
   for (d of data) {
@@ -95,7 +95,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
 
     const author = bookToAuthor.get(book);
     const bookClipped = book.length > DIMENSIONS.yAxisMaxNumChars? book.substring(0, DIMENSIONS.yAxisMaxNumChars) + '...' : book;
-    const bookWithAuthor = `${book}, by ${author}`;
+    const bookWithAuthor = `${bookClipped}, by ${author}`;
     forApex.push({
       // thanks to https://apexcharts.com/docs/multiline-text-and-line-breaks-in-axes-labels/
       // name: [bookClipped, `by ${author}`],
