@@ -40,17 +40,25 @@ const RANK_NOT_IN_TOP_TEN = 0;
 // By population per 2018 estimates:
 // https://www1.nyc.gov/site/planning/planning-level/nyc-population/current-future-populations.page
 // definitely gonna piss off some Manhattan-ites
-const boroughsInOrder = [
-  'brooklyn',
-  'queens',
-  'manhattan',
-  'bronx',
-  'staten_island'
-];
+const boroughsInOrder = new Map([
+  ['brooklyn', 'Brooklyn'],
+  ['queens', 'Queens'],
+  ['manhattan', 'Manhattan'],
+  ['bronx', 'Bronx'],
+  ['staten_island', 'Staten Island']
+]);
+
+
+
+// Some titles are super long, just hard code the ones that need shortening for the labels to
+// fit nicely.
+const ABBREVIATED_BOOK_TITLES = new Map([
+  ['Bad Blood: Secrets and Lies in a Silicon Valley Startup', 'Bad Blood'],
+]);
 
 const DIMENSIONS = {
-  chartHeight: 700,
-  chartWidth: 800,
+  chartHeight: 1400,
+  chartWidth: 700,
   yAxisFontSize: '11px',
 
   yAxisMaxNumChars: 20,
@@ -63,12 +71,13 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
 
   const allBooks = Array.from(bookBoroughCounts).sort(function(x, y) { return y[1] - x[1]; }).map(x => x[0]);
   // ugh this is janky
-  let bookToAuthor = new Map();
+  let bookToAuthors = new Map();
   for (d of data) {
-    if (! bookToAuthor.has(d.book_title)) {
-      bookToAuthor.set(d.book_title, d.book_author);
+    if (! bookToAuthors.has(d.book_title)) {
+      bookToAuthors.set(d.book_title, [d.author_1, d.author_2]);
     }
   }
+  // debugger;
 
   let bookBoroToRank = new Map();
   data.forEach(d => bookBoroToRank.set(bookBoroughKey(d.borough_name, d.book_title), d));
@@ -78,7 +87,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
   for (let book of allBooks) {
     let oneBookRankings = [];
 
-    for (let borough of boroughsInOrder) {
+    for (let borough of boroughsInOrder.keys()) {
       let mapKey = bookBoroughKey(borough, book);
       let fullDataObj = bookBoroToRank.get(mapKey);
       let rank = RANK_NOT_IN_TOP_TEN;
@@ -93,14 +102,14 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
         });
     }
 
-    const author = bookToAuthor.get(book);
-    const bookClipped = book.length > DIMENSIONS.yAxisMaxNumChars? book.substring(0, DIMENSIONS.yAxisMaxNumChars) + '...' : book;
-    const bookWithAuthor = `${bookClipped}, by ${author}`;
+    const authors = bookToAuthors.get(book);
+    const bookClipped = ABBREVIATED_BOOK_TITLES.has(book) ? ABBREVIATED_BOOK_TITLES.get(book) : book;
+    const bookWithAuthor = `${bookClipped}, by ${authors}`;
     forApex.push({
       // thanks to https://apexcharts.com/docs/multiline-text-and-line-breaks-in-axes-labels/
-      // name: [bookClipped, `by ${author}`],
+      name: [bookClipped, `by ${authors}`],
       // name: book,
-      name: bookWithAuthor,
+      // name: bookWithAuthor,
       data: oneBookRankings,
     });
   }
@@ -112,9 +121,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
 
   var dataPoints = [];
 
-  
-  // TODO - x axis label on top
-  // TODO - better color scheme
   // TODO - by author...?
   // TODO - at least include author
   // These docs are shockingly hard to find, but very helpful:
@@ -128,15 +134,24 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     title: {
       text: 'Top 10 Most Checked Out Books from NYC Libraries, by Borough - 2019'
     },
-    // xaxis: {
-    //   position: 'top',
-    // },
-    // legend: {
-    //   position: 'right',
-    // },
+    xaxis: {
+      position: 'top',
+      categories: [...boroughsInOrder.values()],
+      // unclear why we need to do this, but with an offset of zero, the labels for the x-axis just
+      // get drawn over by the plot itself...
+      offsetY: -30,
+      labels: {
+        rotate: 0,
+        // maxHeight: 0,
+      },
+      axisTicks: {show: false}
+    },
+    legend: {
+      position: 'right',
+    },
     yaxis: {
       labels: {
-        maxWidth: 500,
+        maxWidth: 600,
         style: {
           fontSize: DIMENSIONS.yAxisFontSize,
         },
