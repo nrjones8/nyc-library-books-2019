@@ -1,51 +1,51 @@
-borough_name,rank,book_title,book_author
-manhattan,1,Becoming,Michelle Obama
-manhattan,2,Educated: A Memoir,Tara Westover
-manhattan,3,Little Fires Everywhere,Celeste Ng
-manhattan,4,Circe,Madeline Miller
-manhattan,5,Pachinko,Mi Jin Lee
-manhattan,6,Bad Blood: Secrets and Lies in a Silicon Valley Startup,John Carreyrou
-manhattan,7,Milkman,Anna Burns
-manhattan,8,Where the Crawdads Sing,Delia Owens
-manhattan,9,Nine Perfect Strangers,Liane Moriarty
-manhattan,10,An American Marriage,Tayari Jones
-brooklyn,1,Becoming,Michelle Obama
-brooklyn,2,Lost and Found: A Novel,Danielle Steel
-brooklyn,3,Unsolved,James Patterson
-brooklyn,4,Under Currents,Nora Roberts
-brooklyn,5,Blessing In Disguise,Danielle Steel
-brooklyn,6,One Good Deed,David Baldacci
-brooklyn,7,Redemption,David Baldacci
-brooklyn,8,Where the Crawdads Sing,Delia Owens
-brooklyn,9,The 18th Abduction,James Patterson and Maxine Paetro
-brooklyn,10,The New Girl,Daniel Silva
-queens,1,Nine Perfect Strangers,Liane Moriarty
-queens,2,Becoming,Michelle Obama
-queens,3,The Chef,James Patterson with Max DiLallo
-queens,4,Redemption,David Baldacci
-queens,5,The Wedding Guest,Jonathan Kellerman
-queens,6,Turning Point,Danielle Steel
-queens,7,The House Next Door,James Patterson
-queens,8,Someone Knows,Lisa Scottoline
-queens,9,Liar Liar,James Patterson & Candice Fox
-queens,10,The First Lady,James Patterson & Brendan DuBois
-bronx,1,Becoming,Michelle Obama
-bronx,2,Educated: A Memoir,Tara Westover
-bronx,3,Ambush,James Patterson and James O. Born 
-bronx,4,The Chef,James Patterson
-bronx,5,A Spark of Light,Jodi Picoult
-bronx,6,Liar Liar,James Patterson and Candice Fox
-bronx,7,The 18th Abduction,James Patterson and Maxine Paetro
-bronx,8,Long Road to Mercy,David Baldacci
-bronx,9,Target: Alex Cross,James Patterson
-bronx,10,The House Next Door,"James Patterson, Tim Arnold, Max DiLallo, and Susan DiLallo"
-staten_island,1,A Spark of Light,Jodi Picoult
-staten_island,2,Ambush,James Patterson and James O. Born
-staten_island,3,The Reckoning,John Grisham
-staten_island,4,Target: Alex Cross,James Patterson
-staten_island,5,Liar Liar,James Patterson and Candice Fox
-staten_island,6,The Chef,James Patterson
-staten_island,7,Turning Point,Danielle Steel
-staten_island,8,The House Next Door,"James Patterson, Tim Arnold, Max DiLallo, and Susan DiLallo"
-staten_island,9,"Unsolved, Book 2",James Patterson and David Ellis
-staten_island,10,Juror No. 3,James Patterson and Nancy Allen
+borough_name,rank,book_title,author_1,author_2,notes
+manhattan,1,Becoming,Michelle Obama,,
+manhattan,2,Educated: A Memoir,Tara Westover,,
+manhattan,3,Little Fires Everywhere,Celeste Ng,,
+manhattan,4,Circe,Madeline Miller,,
+manhattan,5,Pachinko,Mi Jin Lee,,
+manhattan,6,Bad Blood: Secrets and Lies in a Silicon Valley Startup,John Carreyrou,,
+manhattan,7,Milkman,Anna Burns,,
+manhattan,8,Where the Crawdads Sing,Delia Owens,,
+manhattan,9,Nine Perfect Strangers,Liane Moriarty,,
+manhattan,10,An American Marriage,Tayari Jones,,
+brooklyn,1,Becoming,Michelle Obama,,
+brooklyn,2,Lost and Found: A Novel,Danielle Steel,,
+brooklyn,3,Unsolved,James Patterson,,
+brooklyn,4,Under Currents,Nora Roberts,,
+brooklyn,5,Blessing In Disguise,Danielle Steel,,
+brooklyn,6,One Good Deed,David Baldacci,,
+brooklyn,7,Redemption,David Baldacci,,
+brooklyn,8,Where The Crawdads Sing,Delia Owens,,
+brooklyn,9,The 18th Abduction,James Patterson,Maxine Paetro,
+brooklyn,10,The New Girl,Daniel Silva,,
+queens,1,Nine Perfect Strangers,Liane Moriarty,,
+queens,2,Becoming,Michelle Obama,,
+queens,3,The Chef,James Patterson,Max DiLallo,
+queens,4,Redemption,David Baldacci,,
+queens,5,The Wedding Guest,Jonathan Kellerman,,
+queens,6,Turning Point,Danielle Steel,,
+queens,7,The House Next Door,James Patterson,,
+queens,8,Someone Knows,Lisa Scottoline,,
+queens,9,Liar Liar,James Patterson,Candice Fox,
+queens,10,The First Lady,James Patterson,Brendan DuBois,
+bronx,1,Becoming,Michelle Obama,,
+bronx,2,Educated: A Memoir,Tara Westover,,
+bronx,3,Ambush,James Patterson ,James O. Born,
+bronx,4,The Chef,James Patterson,,
+bronx,5,A Spark of Light,Jodi Picoult,,
+bronx,6,Liar Liar,James Patterson,Candice Fox,
+bronx,7,The 18th Abduction,James Patterson,Maxine Paetro,
+bronx,8,Long Road to Mercy,David Baldacci,,
+bronx,9,Target: Alex Cross,James Patterson,,
+bronx,10,The House Next Door,James Patterson,et al,"Tim Arnold, Max DiLallo, and Susan DiLallo were all co-authors on this series of books."
+staten_island,1,A Spark of Light,Jodi Picoult,,
+staten_island,2,Ambush,James Patterson,James O. Born,
+staten_island,3,The Reckoning,John Grisham,,
+staten_island,4,Target: Alex Cross,James Patterson,,
+staten_island,5,Liar Liar,James Patterson,Candice Fox,
+staten_island,6,The Chef,James Patterson,,
+staten_island,7,Turning Point,Danielle Steel,,
+staten_island,8,The House Next Door,James Patterson,et al,"Tim Arnold, Max DiLallo, and Susan DiLallo were all co-authors on this series of books."
+staten_island,9,"Unsolved, Book 2",James Patterson,David Ellis,
+staten_island,10,Juror No. 3,James Patterson,Nancy Allen,
