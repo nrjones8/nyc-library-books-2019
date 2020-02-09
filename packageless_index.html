@@ -179,7 +179,8 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
         rotate: 0,
         // maxHeight: 0,
       },
-      axisTicks: {show: false}
+      axisTicks: {show: false},
+      tooltip: {enabled: false},
     },
     legend: {
       position: 'right',
@@ -195,10 +196,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       }
     },
     tooltip: {
-      // fixed: {
-      //   enabled: true,
-      //   position: 'topRight'
-      // },
       custom: function({series, seriesIndex, dataPointIndex, w}) {
         const boro = displayableBoros[dataPointIndex];
         // i.e. the nth most read book in this boro
