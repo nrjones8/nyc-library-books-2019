@@ -12,6 +12,12 @@
 <script src="https://d3js.org/d3-array.v2.min.js"></script>
 
 <style>
+  #hover-tooltip {
+    /* match font family from https://apexcharts.com/docs/options/xaxis/ */
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    padding: 10px;
+  }
 </style>
 
 <div id="chart"></div>
@@ -200,25 +206,22 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
         const boro = displayableBoros[dataPointIndex];
         // i.e. the nth most read book in this boro
         const rank = series[seriesIndex][dataPointIndex];
-        const title = forApex[seriesIndex].name;
+        const [ title, authorText ] = forApex[seriesIndex].name;
 
-        let bookText;
-        if (rank === 0) {
-          bookText = `${title} was not in the top 10 for ${boro}`;
-        } else {
-          // TIL
-          const ordinalInd = ordinalIndicator(rank);
-          bookText = `${title} was the ${ordinalInd} most checked out book in ${boro}`;
-        }
-        // debugger;
+        const ordinalInd = ordinalIndicator(rank);
+        const rankText = `${ordinalInd} most checked out book in ${boro}`;
 
-        // TODO book title
+        // TODO ALL authorss
         // TODO Goodreads link
         // TODO(?) NYPL, QPL, BPL link?
-        return `<div>
-          ${bookText}
+        return `<div id="hover-tooltip" class="apexcharts-text">
+          ${title}
+          <br />
+          ${authorText}
+          <br />
+          ${rankText}
         </div>`;
-      }
+      },
     },
     plotOptions: {
       heatmap: {
