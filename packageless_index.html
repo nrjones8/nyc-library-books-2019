@@ -1,11 +1,7 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <meta charset="utf-8">
 <title>NYC's Most Checked Out Books, 2019</title>
 
-<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
-<!-- https://cdnjs.com/libraries/lodash.js/ -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <!-- for fetching - http://learnjsdata.com/read_data.html -->
@@ -21,7 +17,23 @@
 <div id="chart"></div>
 
 <div id="notes">
-  Data from <a href="https://gothamist.com/arts-entertainment/here-are-most-popular-nyc-library-books-2019-borough" target="_blank">The Gothamist</a>.
+  <ul>
+    <li>
+      Data from <a href="https://gothamist.com/arts-entertainment/here-are-most-popular-nyc-library-books-2019-borough" target="_blank">The Gothamist</a>.
+    </li>
+    <li>
+      Includes ebooks and hard copies
+    </li>
+    <li>
+      NYPL serves Manhattan, the Bronx, and Staten Island. Brooklyn and Queens each have their own library system.
+    </li>
+    <li>
+      Beware interpreting! E.g. number 11 12 13 not shown
+    </li>
+    <li>
+      Beware interpreting! Number of copies at given library a function of these numbers as well
+    </li>
+  </ul>
 </div>
 
 <script>
@@ -33,6 +45,26 @@ function bookBoroughKey(borough, bookTitle) {
 
 function booksOrderedByNumBoroughs(allBooksData) {
   const bookBoroughCounts = d3.rollup(allBooksData, v => v.length, d => d.book_title);
+}
+
+function goodreadsUrlByISBN(isbn) {
+  // See https://www.goodreads.com/api/index#book_links
+  return `https://www.goodreads.com/book/isbn/${isbn}`;
+}
+
+function ordinalIndicator(number) {
+  // https://en.wikipedia.org/wiki/Ordinal_indicator#Other_suffixes
+  const ordIndMap = new Map([
+    [1, '1st'],
+    [2, '2nd'],
+    [3, '3rd']
+  ]);
+
+  if (ordIndMap.has(number)) {
+    return ordIndMap.get(number);
+  }
+
+  return `${number}th`;
 }
 
 const RANK_NOT_IN_TOP_TEN = 0;
@@ -47,7 +79,6 @@ const boroughsInOrder = new Map([
   ['bronx', 'Bronx'],
   ['staten_island', 'Staten Island']
 ]);
-
 
 
 // Some titles are super long, just hard code the ones that need shortening for the labels to
@@ -77,7 +108,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       bookToAuthors.set(d.book_title, [d.author_1, d.author_2]);
     }
   }
-  // debugger;
 
   let bookBoroToRank = new Map();
   data.forEach(d => bookBoroToRank.set(bookBoroughKey(d.borough_name, d.book_title), d));
@@ -103,11 +133,15 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     }
 
     const authors = bookToAuthors.get(book);
+    // const authorText = authors[1] === '' ? authors[0] : `${authors[0]}, ${authors[1]}`;
+    // const authorText = authors[1] === '' ? authors[0] : `${authors[0]} & 1 more`;
+    // TODO - either figure out multiple authors, or put note about why not
+    const authorText = authors[0];
     const bookClipped = ABBREVIATED_BOOK_TITLES.has(book) ? ABBREVIATED_BOOK_TITLES.get(book) : book;
     const bookWithAuthor = `${bookClipped}, by ${authors}`;
     forApex.push({
       // thanks to https://apexcharts.com/docs/multiline-text-and-line-breaks-in-axes-labels/
-      name: [bookClipped, `by ${authors}`],
+      name: [bookClipped, `by ${authorText}`],
       // name: book,
       // name: bookWithAuthor,
       data: oneBookRankings,
@@ -119,10 +153,11 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     return aCount > bCount ? 1 : -1;
   });
 
+  const displayableBoros = [...boroughsInOrder.values()];
+
   var dataPoints = [];
 
   // TODO - by author...?
-  // TODO - at least include author
   // These docs are shockingly hard to find, but very helpful:
   // https://apexcharts.com/docs/options/plotoptions/heatmap/
   const options = {
@@ -136,7 +171,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     },
     xaxis: {
       position: 'top',
-      categories: [...boroughsInOrder.values()],
+      categories: displayableBoros,
       // unclear why we need to do this, but with an offset of zero, the labels for the x-axis just
       // get drawn over by the plot itself...
       offsetY: -30,
@@ -151,11 +186,41 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     },
     yaxis: {
       labels: {
-        maxWidth: 600,
+        maxWidth: '400px',
+        align: 'right',
         style: {
           fontSize: DIMENSIONS.yAxisFontSize,
         },
         // formatter: (value) => { return `${value.bookTitle}, by ${value.authorName}`; }
+      }
+    },
+    tooltip: {
+      // fixed: {
+      //   enabled: true,
+      //   position: 'topRight'
+      // },
+      custom: function({series, seriesIndex, dataPointIndex, w}) {
+        const boro = displayableBoros[dataPointIndex];
+        // i.e. the nth most read book in this boro
+        const rank = series[seriesIndex][dataPointIndex];
+        const title = forApex[seriesIndex].name;
+
+        let bookText;
+        if (rank === 0) {
+          bookText = `${title} was not in the top 10 for ${boro}`;
+        } else {
+          // TIL
+          const ordinalInd = ordinalIndicator(rank);
+          bookText = `${title} was the ${ordinalInd} most checked out book in ${boro}`;
+        }
+        // debugger;
+
+        // TODO book title
+        // TODO Goodreads link
+        // TODO(?) NYPL, QPL, BPL link?
+        return `<div>
+          ${bookText}
+        </div>`;
       }
     },
     plotOptions: {
