@@ -49,10 +49,6 @@ function bookBoroughKey(borough, bookTitle) {
   return `${borough}_${bookTitle}`;
 };
 
-function booksOrderedByNumBoroughs(allBooksData) {
-  const bookBoroughCounts = d3.rollup(allBooksData, v => v.length, d => d.book_title);
-}
-
 function goodreadsUrlByISBN(isbn) {
   // See https://www.goodreads.com/api/index#book_links
   return `https://www.goodreads.com/book/isbn/${isbn}`;
@@ -104,9 +100,9 @@ const DIMENSIONS = {
 
 d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
   // i.e. select book_title, count(*) from data gropu by book_title
-  const bookBoroughCounts = d3.rollup(data, v => v.length, d => d.book_title);
+  const byBook = d3.group(data, d => d.book_title);
 
-  const allBooks = Array.from(bookBoroughCounts).sort(function(x, y) { return y[1] - x[1]; }).map(x => x[0]);
+  const allBooks = Array.from(byBook.keys());
   // ugh this is janky
   let bookToAuthors = new Map();
   for (d of data) {
@@ -143,6 +139,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     // const authorText = authors[1] === '' ? authors[0] : `${authors[0]} & 1 more`;
     // TODO - either figure out multiple authors, or put note about why not
     const authorText = authors[0];
+
     const bookClipped = ABBREVIATED_BOOK_TITLES.has(book) ? ABBREVIATED_BOOK_TITLES.get(book) : book;
     const bookWithAuthor = `${bookClipped}, by ${authors}`;
     forApex.push({
@@ -151,12 +148,27 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       // name: book,
       // name: bookWithAuthor,
       data: oneBookRankings,
+      // Not used by Apex, just useful for sorting below
+      fullName: book,
     });
   }
   forApex = forApex.sort(function(bookA, bookB) {
-    const aCount = bookBoroughCounts.get(bookA.name);
-    const bCount = bookBoroughCounts.get(bookB.name);
-    return aCount > bCount ? 1 : -1;
+    const aName = bookA.fullName;
+    const bName = bookB.fullName;
+
+    const aObj = byBook.get(aName);
+    const bObj = byBook.get(bName);
+
+    if (aObj.length === bObj.length) {
+      // If the two books showed up the same number of times, sort by which had the higher rank
+      // (i.e. a book with 2nd place in some boro should be higher than one in 8th place)
+      const aRankInBoro = parseInt(aObj[0].rank);
+      const bRankinBoro = parseInt(bObj[0].rank);
+
+      return aRankInBoro > bRankinBoro ? -1 : 1;
+    } else {
+      return aObj.length > bObj.length ? 1 : -1;
+    }
   });
 
   const displayableBoros = [...boroughsInOrder.values()];
@@ -164,13 +176,18 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
   var dataPoints = [];
 
   // TODO - by author...?
-  // These docs are shockingly hard to find, but very helpful:
+  // These docs are somewhat hard to find, but very helpful:
   // https://apexcharts.com/docs/options/plotoptions/heatmap/
   const options = {
     chart: {
       type: 'heatmap',
       height: DIMENSIONS.chartHeight,
       width: DIMENSIONS.chartWidth,
+      events: {
+        // click: function(event, chartContext, config) {
+        //   console.log('hey click');
+        // },
+      }
     },
     title: {
       text: 'Top 10 Most Checked Out Books from NYC Libraries, by Borough - 2019'
@@ -191,33 +208,67 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     legend: {
       position: 'right',
     },
+    dataLabels: {
+      enabled: true,
+      formatter: function(val, opts) {
+        if (val === 0) {
+          return '';
+        }
+
+        return val;
+      }
+    },
     yaxis: {
+      // sadly can't put links in the axis text...
+      // https://github.com/apexcharts/apexcharts.js/issues/640
       labels: {
         maxWidth: '400px',
         align: 'right',
         style: {
           fontSize: DIMENSIONS.yAxisFontSize,
         },
-        // formatter: (value) => { return `${value.bookTitle}, by ${value.authorName}`; }
+        formatter: function(val, index) {
+          const bookTitle = val[0];
+          const authorLine = val[1];
+          // const [ bookTitle, authorLine ] = val;
+          // const formattedTitle = ABBREVIATED_BOOK_TITLES.has(bookTitle)
+          //   ? ABBREVIATED_BOOK_TITLES.get(bookTitle)
+          //   : bookTitle;
+          console.log(val);
+          console.log([bookTitle, authorLine]);
+          // debugger;
+          // return [formattedTitle, authorLine];
+          return val;
+          // return [bookTitle, authorLine];
+        }
       }
     },
     tooltip: {
+      shared: false,
+      // followCursor: true,
       custom: function({series, seriesIndex, dataPointIndex, w}) {
         const boro = displayableBoros[dataPointIndex];
         // i.e. the nth most read book in this boro
         const rank = series[seriesIndex][dataPointIndex];
         const [ title, authorText ] = forApex[seriesIndex].name;
 
-        const ordinalInd = ordinalIndicator(rank);
-        const rankText = `${ordinalInd} most checked out book in ${boro}`;
+        let rankText;
+        if (rank === 0) {
+          rankText = `Not in the top 10 in ${boro}`;
+        } else {
+          const ordinalInd = ordinalIndicator(rank);
+          rankText = `${ordinalInd} most checked out book in ${boro}`;
+        }
 
         // TODO ALL authorss
         // TODO Goodreads link
         // TODO(?) NYPL, QPL, BPL link?
         return `<div id="hover-tooltip" class="apexcharts-text">
-          ${title}
-          <br />
-          ${authorText}
+          <a href="https://notdoneyet.com">
+            ${title}
+            <br />
+            ${authorText}
+          </a>
           <br />
           ${rankText}
         </div>`;
@@ -277,5 +328,18 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     var chart = new ApexCharts(document.querySelector("#chart"), options);
 
     chart.render();
+
+    // or just an event handler for when someone clicks the title??
+    // in theory could wrap all the yaxis labels in anchors??
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/a
+    // https://plainjs.com/javascript/manipulation/wrap-an-html-structure-around-an-element-28/
+    // var axisLabels = document.getElementsByClassName('apexcharts-yaxis-label ');
+    // debugger;
+    // for (labelEl of axisLabels) {
+    //   var wrapperLink = document.createElement('a');
+    //   wrapperLink.setAttribute('xlink:href', 'https://nytimes.com');
+    //   labelEl.parentNode.insertBefore(wrapperLink, labelEl);
+    //   wrapperLink.appendChild(labelEl);
+    // };
 });
 </script>
