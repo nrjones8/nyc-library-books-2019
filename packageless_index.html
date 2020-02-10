@@ -34,6 +34,9 @@
       NYPL serves Manhattan, the Bronx, and Staten Island. Brooklyn and Queens each have their own library system.
     </li>
     <li>
+      Explain the ordering (books that showed up in multiple boroughs, then order by rank)
+    </li>
+    <li>
       Beware interpreting! E.g. number 11 12 13 not shown
     </li>
     <li>
@@ -99,15 +102,19 @@ const DIMENSIONS = {
 }
 
 d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
-  // i.e. select book_title, count(*) from data gropu by book_title
   const byBook = d3.group(data, d => d.book_title);
 
   const allBooks = Array.from(byBook.keys());
   // ugh this is janky
   let bookToAuthors = new Map();
+  let bookTitleToISBN = new Map();
   for (d of data) {
     if (! bookToAuthors.has(d.book_title)) {
       bookToAuthors.set(d.book_title, [d.author_1, d.author_2]);
+    }
+
+    if (! bookTitleToISBN.has(d.book_title)) {
+      bookTitleToISBN.set(d.book_title, d.isbn13);
     }
   }
 
@@ -184,9 +191,26 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       height: DIMENSIONS.chartHeight,
       width: DIMENSIONS.chartWidth,
       events: {
-        // click: function(event, chartContext, config) {
-        //   console.log('hey click');
-        // },
+        click: function(event, chartContext, config) {
+          // lol this is super janky
+
+          // The element that was clicked. It could be the book title, or the author, since they're
+          // two different elements
+          const srcElement = event.srcElement;
+
+          // Regardless of whether it's the title or the author, they share the same parent
+          const parentNode = srcElement.parentNode;
+
+          // ...but the first child of the parent is the title!
+          const firstChildOfParent = parentNode.children[0];
+          const foundTitle = firstChildOfParent.innerHTML;
+          const isbn13 = bookTitleToISBN.get(foundTitle);
+
+          if (isbn13) {
+            const goodreadsUrl = goodreadsUrlByISBN(isbn13);
+            window.open(goodreadsUrl, '_blank');
+          }
+        },
       }
     },
     title: {
@@ -234,8 +258,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
           // const formattedTitle = ABBREVIATED_BOOK_TITLES.has(bookTitle)
           //   ? ABBREVIATED_BOOK_TITLES.get(bookTitle)
           //   : bookTitle;
-          console.log(val);
-          console.log([bookTitle, authorLine]);
           // debugger;
           // return [formattedTitle, authorLine];
           return val;
@@ -244,35 +266,36 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       }
     },
     tooltip: {
-      shared: false,
-      // followCursor: true,
-      custom: function({series, seriesIndex, dataPointIndex, w}) {
-        const boro = displayableBoros[dataPointIndex];
-        // i.e. the nth most read book in this boro
-        const rank = series[seriesIndex][dataPointIndex];
-        const [ title, authorText ] = forApex[seriesIndex].name;
+      enabled: false,
+      // shared: false,
+      // // followCursor: true,
+      // custom: function({series, seriesIndex, dataPointIndex, w}) {
+      //   const boro = displayableBoros[dataPointIndex];
+      //   // i.e. the nth most read book in this boro
+      //   const rank = series[seriesIndex][dataPointIndex];
+      //   const [ title, authorText ] = forApex[seriesIndex].name;
 
-        let rankText;
-        if (rank === 0) {
-          rankText = `Not in the top 10 in ${boro}`;
-        } else {
-          const ordinalInd = ordinalIndicator(rank);
-          rankText = `${ordinalInd} most checked out book in ${boro}`;
-        }
+      //   let rankText;
+      //   if (rank === 0) {
+      //     rankText = `Not in the top 10 in ${boro}`;
+      //   } else {
+      //     const ordinalInd = ordinalIndicator(rank);
+      //     rankText = `${ordinalInd} most checked out book in ${boro}`;
+      //   }
 
-        // TODO ALL authorss
-        // TODO Goodreads link
-        // TODO(?) NYPL, QPL, BPL link?
-        return `<div id="hover-tooltip" class="apexcharts-text">
-          <a href="https://notdoneyet.com">
-            ${title}
-            <br />
-            ${authorText}
-          </a>
-          <br />
-          ${rankText}
-        </div>`;
-      },
+      //   // TODO ALL authorss
+      //   // TODO Goodreads link
+      //   // TODO(?) NYPL, QPL, BPL link?
+      //   return `<div id="hover-tooltip" class="apexcharts-text">
+      //     <a href="https://notdoneyet.com">
+      //       ${title}
+      //       <br />
+      //       ${authorText}
+      //     </a>
+      //     <br />
+      //     ${rankText}
+      //   </div>`;
+      // },
     },
     plotOptions: {
       heatmap: {
