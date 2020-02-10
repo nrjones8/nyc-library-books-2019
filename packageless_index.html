@@ -18,6 +18,9 @@
     font-size: 11px;
     padding: 10px;
   }
+  .clickable-svg-text {
+    text-decoration: underline;
+  }
 </style>
 
 <div id="chart"></div>
@@ -250,6 +253,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
         align: 'right',
         style: {
           fontSize: DIMENSIONS.yAxisFontSize,
+          cssClass: 'apexcharts-yaxis-label clickable-svg-text',
         },
         formatter: function(val, index) {
           const bookTitle = val[0];
