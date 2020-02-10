@@ -1,51 +1,51 @@
-borough_name,rank,book_title,author_1,author_2,notes
-manhattan,1,Becoming,Michelle Obama,,
-manhattan,2,Educated: A Memoir,Tara Westover,,
-manhattan,3,Little Fires Everywhere,Celeste Ng,,
-manhattan,4,Circe,Madeline Miller,,
-manhattan,5,Pachinko,Mi Jin Lee,,
-manhattan,6,Bad Blood: Secrets and Lies in a Silicon Valley Startup,John Carreyrou,,
-manhattan,7,Milkman,Anna Burns,,
-manhattan,8,Where the Crawdads Sing,Delia Owens,,
-manhattan,9,Nine Perfect Strangers,Liane Moriarty,,
-manhattan,10,An American Marriage,Tayari Jones,,
-brooklyn,1,Becoming,Michelle Obama,,
-brooklyn,2,Lost and Found: A Novel,Danielle Steel,,
-brooklyn,3,Unsolved,James Patterson,,
-brooklyn,4,Under Currents,Nora Roberts,,
-brooklyn,5,Blessing In Disguise,Danielle Steel,,
-brooklyn,6,One Good Deed,David Baldacci,,
-brooklyn,7,Redemption,David Baldacci,,
-brooklyn,8,Where the Crawdads Sing,Delia Owens,,
-brooklyn,9,The 18th Abduction,James Patterson,Maxine Paetro,
-brooklyn,10,The New Girl,Daniel Silva,,
-queens,1,Nine Perfect Strangers,Liane Moriarty,,
-queens,2,Becoming,Michelle Obama,,
-queens,3,The Chef,James Patterson,Max DiLallo,
-queens,4,Redemption,David Baldacci,,
-queens,5,The Wedding Guest,Jonathan Kellerman,,
-queens,6,Turning Point,Danielle Steel,,
-queens,7,The House Next Door,James Patterson,,
-queens,8,Someone Knows,Lisa Scottoline,,
-queens,9,Liar Liar,James Patterson,Candice Fox,
-queens,10,The First Lady,James Patterson,Brendan DuBois,
-bronx,1,Becoming,Michelle Obama,,
-bronx,2,Educated: A Memoir,Tara Westover,,
-bronx,3,Ambush,James Patterson,James O. Born,
-bronx,4,The Chef,James Patterson,,
-bronx,5,A Spark of Light,Jodi Picoult,,
-bronx,6,Liar Liar,James Patterson,Candice Fox,
-bronx,7,The 18th Abduction,James Patterson,Maxine Paetro,
-bronx,8,Long Road to Mercy,David Baldacci,,
-bronx,9,Target: Alex Cross,James Patterson,,
-bronx,10,The House Next Door,James Patterson,et al,"Tim Arnold, Max DiLallo, and Susan DiLallo were all co-authors on this series of books."
-staten_island,1,A Spark of Light,Jodi Picoult,,
-staten_island,2,Ambush,James Patterson,James O. Born,
-staten_island,3,The Reckoning,John Grisham,,
-staten_island,4,Target: Alex Cross,James Patterson,,
-staten_island,5,Liar Liar,James Patterson,Candice Fox,
-staten_island,6,The Chef,James Patterson,,
-staten_island,7,Turning Point,Danielle Steel,,
-staten_island,8,The House Next Door,James Patterson,et al,"Tim Arnold, Max DiLallo, and Susan DiLallo were all co-authors on this series of books."
-staten_island,9,"Unsolved, Book 2",James Patterson,David Ellis,
-staten_island,10,Juror No. 3,James Patterson,Nancy Allen,
+borough_name,rank,book_title,author_1,author_2,notes,isbn13
+manhattan,1,Becoming,Michelle Obama,,,9781524763138
+manhattan,2,Educated: A Memoir,Tara Westover,,,9780399590504
+manhattan,3,Little Fires Everywhere,Celeste Ng,,,9780735224292
+manhattan,4,Circe,Madeline Miller,,,9780316556347
+manhattan,5,Pachinko,Mi Jin Lee,,,9781455563920
+manhattan,6,Bad Blood: Secrets and Lies in a Silicon Valley Startup,John Carreyrou,,,9781524731656
+manhattan,7,Milkman,Anna Burns,,,9781644450000
+manhattan,8,Where the Crawdads Sing,Delia Owens,,,9780735219090
+manhattan,9,Nine Perfect Strangers,Liane Moriarty,,,9781250069825
+manhattan,10,An American Marriage,Tayari Jones,,,9781616208776
+brooklyn,1,Becoming,Michelle Obama,,,9781524763138
+brooklyn,2,Lost and Found: A Novel,Danielle Steel,,,9780399179471
+brooklyn,3,Unsolved,James Patterson,,,9780316419826
+brooklyn,4,Under Currents,Nora Roberts,,,9781250207098
+brooklyn,5,Blessing In Disguise,Danielle Steel,,,9780399179327
+brooklyn,6,One Good Deed,David Baldacci,,,9781538750568
+brooklyn,7,Redemption,David Baldacci,,,9781538761458
+brooklyn,8,Where the Crawdads Sing,Delia Owens,,,9780735219090
+brooklyn,9,The 18th Abduction,James Patterson,Maxine Paetro,,9781538731598
+brooklyn,10,The New Girl,Daniel Silva,,,9780062834836
+queens,1,Nine Perfect Strangers,Liane Moriarty,,,9781250069825
+queens,2,Becoming,Michelle Obama,,,9781524763138
+queens,3,The Chef,James Patterson,Max DiLallo,,9781538714867
+queens,4,Redemption,David Baldacci,,,9781538761458
+queens,5,The Wedding Guest,Jonathan Kellerman,,,9780525618492
+queens,6,Turning Point,Danielle Steel,,,9780399179358
+queens,7,The House Next Door,James Patterson,,,9781538713891
+queens,8,Someone Knows,Lisa Scottoline,,,9780525539667
+queens,9,Liar Liar,James Patterson,Candice Fox,,9781538730720
+queens,10,The First Lady,James Patterson,Brendan DuBois,,9781780899770
+bronx,1,Becoming,Michelle Obama,,,9781524763138
+bronx,2,Educated: A Memoir,Tara Westover,,,9780399590504
+bronx,3,Ambush,James Patterson,James O. Born,,9781538713785
+bronx,4,The Chef,James Patterson,,,9781538714867
+bronx,5,A Spark of Light,Jodi Picoult,,,9780345545008
+bronx,6,Liar Liar,James Patterson,Candice Fox,,9781538730720
+bronx,7,The 18th Abduction,James Patterson,Maxine Paetro,,9781538731598
+bronx,8,Long Road to Mercy,David Baldacci,,,9781538761571
+bronx,9,Target: Alex Cross,James Patterson,,,9780316273947
+bronx,10,The House Next Door,James Patterson,"Tim Arnold, Max DiLallo, Susan DiLallo",,9781538713891
+staten_island,1,A Spark of Light,Jodi Picoult,,,9780345545008
+staten_island,2,Ambush,James Patterson,James O. Born,,9781538713785
+staten_island,3,The Reckoning,John Grisham,,,9781984819581
+staten_island,4,Target: Alex Cross,James Patterson,,,9780316273947
+staten_island,5,Liar Liar,James Patterson,Candice Fox,,9781538730720
+staten_island,6,The Chef,James Patterson,,,9781538714867
+staten_island,7,Turning Point,Danielle Steel,,,9780399179358
+staten_island,8,The House Next Door,James Patterson,"Tim Arnold, Max DiLallo, Susan DiLallo",,9781538713891
+staten_island,9,Unsolved,James Patterson,David Ellis,,9780316419826
+staten_island,10,Juror No. 3,James Patterson,Nancy Allen,,9781538760772
