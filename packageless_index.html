@@ -145,10 +145,10 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     }
 
     const authors = bookToAuthors.get(book);
-    // const authorText = authors[1] === '' ? authors[0] : `${authors[0]}, ${authors[1]}`;
+    const authorText = authors[1] === '' ? authors[0] : `${authors[0]}, ${authors[1]}`;
     // const authorText = authors[1] === '' ? authors[0] : `${authors[0]} & 1 more`;
     // TODO - either figure out multiple authors, or put note about why not
-    const authorText = authors[0];
+    // const authorText = authors[0];
 
     const bookClipped = ABBREVIATED_BOOK_TITLES.has(book) ? ABBREVIATED_BOOK_TITLES.get(book) : book;
 
@@ -257,7 +257,7 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       // sadly can't put links in the axis text...
       // https://github.com/apexcharts/apexcharts.js/issues/640
       labels: {
-        minWidth: 130,
+        minWidth: 180,
         maxWidth: 200,
         align: 'right',
         style: {
