@@ -100,7 +100,7 @@ const DIMENSIONS = {
   chartWidth: 700,
   yAxisFontSize: '11px',
 
-  yAxisMaxNumChars: 20,
+  yAxisMaxNumChars: 24,
 
 }
 
@@ -151,12 +151,20 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     const authorText = authors[0];
 
     const bookClipped = ABBREVIATED_BOOK_TITLES.has(book) ? ABBREVIATED_BOOK_TITLES.get(book) : book;
-    const bookWithAuthor = `${bookClipped}, by ${authors}`;
+
+    // let name;
+    // const byAuthor = `by ${authorText}`;
+    // if (bookClipped.length > DIMENSIONS.yAxisMaxNumChars) {
+    //   const firstLine = bookClipped.substring(0, DIMENSIONS.yAxisMaxNumChars);
+    //   const secondLine = bookClipped.substring(DIMENSIONS.yAxisMaxNumChars);
+    //   name = [firstLine, secondLine, byAuthor]
+    // } else {
+    //   name = [bookClipped, byAuthor];
+    // }
+
     forApex.push({
       // thanks to https://apexcharts.com/docs/multiline-text-and-line-breaks-in-axes-labels/
       name: [bookClipped, `by ${authorText}`],
-      // name: book,
-      // name: bookWithAuthor,
       data: oneBookRankings,
       // Not used by Apex, just useful for sorting below
       fullName: book,
@@ -249,24 +257,13 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       // sadly can't put links in the axis text...
       // https://github.com/apexcharts/apexcharts.js/issues/640
       labels: {
-        maxWidth: '400px',
+        minWidth: 130,
+        maxWidth: 200,
         align: 'right',
         style: {
           fontSize: DIMENSIONS.yAxisFontSize,
           cssClass: 'apexcharts-yaxis-label clickable-svg-text',
         },
-        formatter: function(val, index) {
-          const bookTitle = val[0];
-          const authorLine = val[1];
-          // const [ bookTitle, authorLine ] = val;
-          // const formattedTitle = ABBREVIATED_BOOK_TITLES.has(bookTitle)
-          //   ? ABBREVIATED_BOOK_TITLES.get(bookTitle)
-          //   : bookTitle;
-          // debugger;
-          // return [formattedTitle, authorLine];
-          return val;
-          // return [bookTitle, authorLine];
-        }
       }
     },
     tooltip: {
