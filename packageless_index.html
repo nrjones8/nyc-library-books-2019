@@ -225,7 +225,8 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       }
     },
     title: {
-      text: 'Top 10 Most Checked Out Books from NYC Libraries, by Borough - 2019'
+      text: 'Top 10 Most Checked Out Books from NYC Libraries, by Borough - 2019',
+      align: 'center',
     },
     xaxis: {
       position: 'top',
@@ -241,7 +242,8 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
       tooltip: {enabled: false},
     },
     legend: {
-      position: 'right',
+      show: false,
+      // position: 'right',
     },
     dataLabels: {
       enabled: true,
