@@ -26,28 +26,15 @@
 <div id="chart"></div>
 
 <div id="notes">
-  <i>Notes to include somewhere</i>
-  <ul>
-    <li>
-      Data from <a href="https://gothamist.com/arts-entertainment/here-are-most-popular-nyc-library-books-2019-borough" target="_blank">The Gothamist</a>.
-    </li>
-    <li>
-      Includes ebooks and hard copies
-    </li>
-    <li>
-      NYPL serves Manhattan, the Bronx, and Staten Island. Brooklyn and Queens each have their own library system.
-    </li>
-    <li>
-      Explain the ordering (books that showed up in multiple boroughs, then order by rank)
-    </li>
-    <li>
-      Caveat: only have the top 10 for each borough. So it's possible that a book that was number 9
-      in one borough was number 11 in another borough, but we're just displaying that as "not in top 10"
-    </li>
-    <li>
-      Caveat: number of checkouts is a function of 1. Availability - i.e. number of copies at given library, and 2. Interest - i.e. what people wanted to read. People will probably interpret this data as mostly #2, but important to remember #1.
-    </li>
-  </ul>
+  <i>
+    <p>
+      Data come from <a href="https://gothamist.com/arts-entertainment/here-are-most-popular-nyc-library-books-2019-borough" target="_blank">The Gothamist</a>, and include both ebooks and hard copy checkouts. The NYPL serves Manhattan, the Bronx, and Staten Island. Brooklyn and Queens each have their own public library systems.
+    </p>
+
+    <p>
+      Boroughs are ordered left to right by most populous to least. Books are ordered by number of times the book appeared in a top ten list - e.g. "Becoming" appeared in four boroughs, so it is shown first. Books that only appeared in one borough's top ten are ordered by their rank in that borough (e.g. a #2 book would appear before a #9 one).
+    </p>
+  </i>
 </div>
 
 <script>
