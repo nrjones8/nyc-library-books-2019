@@ -260,35 +260,6 @@ d3.csv('most_read_books_nyc_2019.csv').then(function(data) {
     },
     tooltip: {
       enabled: false,
-      // shared: false,
-      // // followCursor: true,
-      // custom: function({series, seriesIndex, dataPointIndex, w}) {
-      //   const boro = displayableBoros[dataPointIndex];
-      //   // i.e. the nth most read book in this boro
-      //   const rank = series[seriesIndex][dataPointIndex];
-      //   const [ title, authorText ] = forApex[seriesIndex].name;
-
-      //   let rankText;
-      //   if (rank === 0) {
-      //     rankText = `Not in the top 10 in ${boro}`;
-      //   } else {
-      //     const ordinalInd = ordinalIndicator(rank);
-      //     rankText = `${ordinalInd} most checked out book in ${boro}`;
-      //   }
-
-      //   // TODO ALL authorss
-      //   // TODO Goodreads link
-      //   // TODO(?) NYPL, QPL, BPL link?
-      //   return `<div id="hover-tooltip" class="apexcharts-text">
-      //     <a href="https://notdoneyet.com">
-      //       ${title}
-      //       <br />
-      //       ${authorText}
-      //     </a>
-      //     <br />
-      //     ${rankText}
-      //   </div>`;
-      // },
     },
     plotOptions: {
       heatmap: {
