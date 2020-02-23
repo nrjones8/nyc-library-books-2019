@@ -26,23 +26,30 @@
     /*font-size: .75rem;*/
     padding: 10px;
   }
-
-
+  
   .content-wrapper {
+    display: grid;
+
+    /* "At least 200px, at most 1/2 of the remaining flex space" */
+    grid-template-columns: 600px minmax(200px, .5fr);
+    grid-gap: 50px;
     grid-template-areas:
-      "main"
-      "sd"
+      "main sd"
   }
 
-  @media (min-width: 800px) {
+  @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
     .content-wrapper {
-      display: grid;
-
-      /* "At least 200px, at most 1/2 of the remaining flex space" */
-      grid-template-columns: 600px minmax(200px, .5fr);
-      grid-gap: 50px;
       grid-template-areas:
-        "main sd"
+        "main"
+        "sd"
+    }
+  }
+
+  @media (max-width: 800px) {
+    .content-wrapper {
+      grid-template-areas:
+        "main"
+        "sd"
     }
   }
 
