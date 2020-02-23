@@ -12,29 +12,56 @@
 <script src="https://d3js.org/d3-array.v2.min.js"></script>
 
 <style>
-  #hover-tooltip {
-    /* match font family from https://apexcharts.com/docs/options/xaxis/ */
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 11px;
-    padding: 10px;
-  }
   .clickable-svg-text {
     text-decoration: underline;
   }
+  .graphic {
+    grid-area: main;
+  }
+
+  .notes {
+    grid-area: sd;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    /*font-size: .75rem;*/
+    padding: 10px;
+  }
+
+
+  .content-wrapper {
+    grid-template-areas:
+      "main"
+      "sd"
+  }
+
+  @media (min-width: 800px) {
+    .content-wrapper {
+      display: grid;
+
+      /* "At least 200px, at most 1/2 of the remaining flex space" */
+      grid-template-columns: 600px minmax(200px, .5fr);
+      grid-gap: 50px;
+      grid-template-areas:
+        "main sd"
+    }
+  }
+
 </style>
 
-<div id="chart"></div>
+<div class="content-wrapper">
+  <div id="chart" class="graphic"></div>
 
-<div id="notes">
-  <i>
-    <p>
-      Data come from <a href="https://gothamist.com/arts-entertainment/here-are-most-popular-nyc-library-books-2019-borough" target="_blank">The Gothamist</a>, and include both ebooks and hard copy checkouts. The NYPL serves Manhattan, the Bronx, and Staten Island. Brooklyn and Queens each have their own public library systems.
-    </p>
+  <div class="notes">
+    <i>
+      <p>
+        Data come from <a href="https://gothamist.com/arts-entertainment/here-are-most-popular-nyc-library-books-2019-borough" target="_blank">The Gothamist</a>, and include both ebooks and hard copy checkouts. The NYPL serves Manhattan, the Bronx, and Staten Island. Brooklyn and Queens each have their own public library systems.
+      </p>
 
-    <p>
-      Boroughs are ordered left to right by most populous to least. Books are ordered by number of times the book appeared in a top ten list - e.g. "Becoming" appeared in four boroughs, so it is shown first. Books that only appeared in one borough's top ten are ordered by their rank in that borough (e.g. a #2 book would appear before a #9 one).
-    </p>
-  </i>
+      <p>
+        Boroughs are ordered left to right by most populous to least. Books are ordered by number of times the book appeared in a top ten list - e.g. "Becoming" appeared in four boroughs, so it is shown first. Books that only appeared in one borough's top ten are ordered by their rank in that borough (e.g. a #2 book would appear before a #9 one).
+      </p>
+    </i>
+  </div>
 </div>
 
 <script>
